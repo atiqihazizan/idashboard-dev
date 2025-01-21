@@ -1,0 +1,133 @@
+import { useSearchParams } from "react-router-dom";
+import "./App.css";
+// import BST from "./pages/Bst";
+// import FFB from "./pages/Ffb";
+import { useState } from "react";
+import Tank from "./components/Tank";
+import Fruit from "./components/Fruit";
+
+const bstSocket = mqSocket();
+const ffbSocket = mqSocket();
+bstSocket.init(`thp/bst/#`);
+ffbSocket.init(`thp/ffb/#`);
+
+function App() {
+  const [searchParams] = useSearchParams();
+  const getPage = searchParams.get("page");
+  // const pages = {
+  //   bst: <BST />,
+  //   ffb: <FFB />,
+  // };
+  const [dataCrop, setDataCrop] = useState(() =>
+    mills.reduce(
+      (p, { topic, title }) => ({
+        ...p,
+        [topic]: {
+          title,
+          currTime: "",
+          data: {
+            I: { label: "OWN", nett: 0, trip: 0 },
+            E: { label: "OUTSIDE", nett: 0, trip: 0 },
+            C: { label: "CORROLATE", nett: 0, trip: 0 },
+          },
+          total: 0,
+          y2t: 0,
+          m2t: 0,
+          status: "ONLINE",
+        },
+      }),
+      {}
+    )
+  );
+  const [dataCPO, setDataCPO] = useState(() =>
+    mills.reduce(
+      (p, { topic, ...e }) => ({
+        ...p,
+        [topic]: { ...e, tabledata: false },
+      }),
+      {}
+    )
+  );
+
+  bstSocket.onReceived(({ topic, message: newData }) => {
+    const _topic = topic.replace("thp/bst/", "");
+    const _data = { ...dataCPO };
+    const _preData = _data[_topic].tabledata;
+
+    if (_preData === false) _data[_topic].tabledata = [newData];
+    if (_preData) {
+      let chkUpdate = false;
+
+      _data[_topic].tabledata = _preData.map((p) => {
+        const o = newData.bstNo == p.bstNo || false;
+        if (o) {
+          chkUpdate = true;
+          return newData;
+        }
+        return p;
+      });
+
+      if (chkUpdate == false) _data[_topic].tabledata.push(newData);
+    }
+    if (!objectEmpty(newData)) setDataCPO(_data);
+  });
+
+  ffbSocket.onReceived(({ topic, message }) => {
+    let total = 0,
+      currDate;
+    const _topic = topic.replace("thp/ffb/", "");
+    const _table = message.Table1;
+    const _data = { ...dataCrop };
+
+    if (_data[_topic] == undefined) return;
+
+    const _disp = Object.keys(_data[_topic].data);
+
+    const newData = _disp.reduce(
+      (acc, curr) =>
+        (acc = {
+          ...acc,
+          [curr]: (() => {
+            const _o = _data[_topic].data[curr];
+            return {
+              ..._o,
+              ..._table
+                .filter((item, idx) => item.DrCrSubType == curr)
+                .reduce((a, c) => {
+                  const _nett = parseInt(c.Nett) * 1000;
+                  const _trip = parseInt(c.Trip);
+                  currDate = currDateTime(c.DateQry);
+                  total += _nett;
+                  return (a = {
+                    ...a,
+                    nett: _nett + (a?.nett || 0),
+                    trip: _trip + (a?.trip || 0),
+                  });
+                }, {}),
+            };
+          })(),
+        }),
+      {}
+    );
+    _data[_topic] = {
+      ..._data[_topic],
+      data: newData,
+      total: total,
+      currTime: currDate,
+    };
+
+    if (!objectEmpty(_table)) setDataCrop(_data);
+  });
+
+  return (
+    <div className="grid grid-cols-3 gap-4 p-4 grid-auto-rows-max-h-300">
+      {/* {getPage && pages[getPage]} */}
+      {mills.map(({ topic }, i) => {
+        if (getPage === "ffb") return <Fruit key={i} {...dataCrop[topic]} />;
+        if (getPage === "bst") return <Tank key={i} {...dataCPO[topic]} />;
+      })}
+    </div>
+  );
+}
+
+export default App;

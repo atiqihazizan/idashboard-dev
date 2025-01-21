@@ -1,0 +1,181 @@
+body {
+  font-family: sans-serif;
+  /* background-color: white; */
+  background-color: rgb(5, 8, 71);
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+@font-face {
+  font-family: "seven segment";
+  src: url("./font-segments/624871e1b6172da8c089029daf0c632e.eot");
+  src: url("./font-segments/624871e1b6172da8c089029daf0c632e.eot?#iefix")
+      format("embedded-opentype"),
+    url("./font-segments/624871e1b6172da8c089029daf0c632e.woff2")
+      format("woff2"),
+    url("./font-segments/624871e1b6172da8c089029daf0c632e.woff") format("woff"),
+    url("./font-segments/624871e1b6172da8c089029daf0c632e.ttf")
+      format("truetype"),
+    url("./font-segments/624871e1b6172da8c089029daf0c632e.svg#Seven Segment")
+      format("svg");
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table td {
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+.text-monospace {
+  font-family: monospace, sans-serif;
+}
+
+.text-segment {
+  /* font-size: 4rem !important; */
+  font-family: "seven segment", sans-serif !important;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.trip_table td {
+  /* font-family: monospace; */
+  border: 3px solid black;
+  padding: 0.5rem;
+}
+
+.trip_table .text-segment td {
+  /* font-size: 2.2rem !important; */
+}
+
+.trip_table .ffbtotal {
+  letter-spacing: 0.2rem;
+}
+
+#tripcount {
+  /* font-size: 7rem; */
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.trip_table .img {
+  padding: 0;
+}
+
+.trip_table .img img {
+  width: 56px;
+}
+
+/* .trip_table .ffb td,
+.trip_table .total td {
+  font-size: 1.4rem !important;
+} */
+
+.trip_table {
+  /* position: fixed;
+  top: 0; */
+}
+
+.bst_table {
+  width: 100%;
+  /* position: fixed; */
+  /* bottom: 0; */
+}
+
+.bst_table td {
+  font-family: monospace;
+  border: 3px solid black;
+}
+
+.bst_name > td {
+  padding: 0.5rem;
+}
+
+.col_bst_info {
+  padding: 0.5rem;
+}
+
+.col_bst_tank {
+  padding: 0;
+}
+
+.bst_info td {
+  border: 0 !important;
+  font-size: 1.1rem;
+  padding: 0;
+}
+
+.bst_info td.text-segment {
+  font-size: 1.7rem !important;
+}
+
+.bst_info td:first-child {
+  text-align: left;
+}
+
+.bst_info td:nth-child(2) {
+  text-align: right;
+  /* font-size: 20px; */
+  font-weight: 900;
+}
+
+.col_bst_tank {
+  position: relative;
+  width: 100px;
+}
+
+.percent_wrapper {
+  position: absolute;
+  left: 24%;
+  bottom: 18%;
+  font-weight: bold;
+  font-family: "seven segment" !important;
+  /* background: #5d5d5d; */
+  background: transparent;
+  width: calc(100% - 59%);
+  /* width: 50px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 150%;
+  color: white;
+  text-align: center;
+}
+
+.bst_no {
+  position: absolute;
+  left: 25%;
+  top: 26%;
+  font-size: 20pt;
+  /* background: #5d5d5d; */
+  background: transparent;
+  width: fit-content;
+  color: white;
+  /* font-weight: 800; */
+}
+
+.py-05 {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.rotate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  font-size: 13pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-family: monospace, sans-serif;
+  writing-mode: vertical-rl;
+}

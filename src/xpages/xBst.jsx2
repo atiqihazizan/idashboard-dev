@@ -1,0 +1,59 @@
+import { useEffect, useState } from "react";
+import { mills } from "../assets/conf.json";
+import Tank from "../components/Tank";
+import useBroadcast from "../useBroadcast";
+
+function currDateTime() {
+  const now = new Date();
+  const dateTime = now
+    .toLocaleString("ms-MY", {
+      // timeZone: "UTC",
+      hour12: false,
+      month: "long",
+      day: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    })
+    .replaceAll("/", " ")
+    .replaceAll("pada", "");
+  return dateTime;
+}
+
+export default function BST() {
+  const { connectStatus, mqttConnect, payLoad } = useBroadcast();
+  const [dataCPO, setData] = useState(() =>
+    mills.reduce(
+      (p, { topic, ...e }) => ({
+        ...p,
+        [topic]: {
+          ...e,
+          currTime: "",
+          type: "",
+          height: 0,
+          pct: 0,
+          temp: 0,
+          vol: 1548.32,
+          status: "ONLINE",
+        },
+      }),
+      {}
+    )
+  );
+
+  useEffect(() => {
+    mqttConnect('thp/bst/kilangkotabahagia')
+    // mqttPub({ topic: 'test', qos: 0, payload: JSON.stringify(currDateTime()) })
+
+  }, [])
+
+  return <>
+    <p>{connectStatus} test ...</p>
+    <p>{payLoad?.message}</p>
+  </>
+
+  // return mills.map(({ title, tanks, topic }, i) => (
+  //   <Tank key={i} {...dataCPO[topic]} currTime={currDateTime()} />
+  // ));
+}

@@ -1,0 +1,81 @@
+import { useEffect, useState } from "react";
+import { mills } from "../assets/conf.json";
+import Tank from "../components/Tank";
+// import useBroadcast from "../useBroadcast";
+
+export default function BST() {
+  const [dataCPO, setData] = useState(() =>
+    mills.reduce(
+      (p, { topic, ...e }) => ({
+        ...p,
+        [topic]: {
+          ...e,
+          currTime: "",
+          type: "",
+          height: 0,
+          pct: 0,
+          temp: 0,
+          vol: 1548.32,
+          status: "ONLINE",
+        },
+      }),
+      {}
+    )
+  );
+
+  // const { mqttConnect, mqttSub, mqttPub, connectStatus, payLoad } =
+  //   useBroadcast();
+
+  function currDateTime() {
+    const now = new Date();
+    const dateTime = now
+      .toLocaleString("ms-MY", {
+        // timeZone: "UTC",
+        hour12: false,
+        month: "long",
+        day: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })
+      .replaceAll("/", " ")
+      .replaceAll("pada", "");
+    return dateTime;
+  }
+
+  // mqtt: {
+  //   mqttHost: "test.mosquitto.org",
+  //   mqttPort: "1883",
+  //   protocol: "mqtt",
+  //   clientId: "client" + Math.random().toString(36).substring(7),
+  // },
+
+  return <></>
+  // mqttConnect("mqtt://test.mosquitto.org:1883", {
+  //   keepalive: 60,
+  //   clientId: "client" + Math.random().toString(36).substring(7),
+  //   protocolId: "MQTT",
+  //   protocolViersion: 5,
+  //   clean: true,
+  //   reconnectPeriod: 1000,
+  //   connectTimeout: 30 * 1000,
+  // });
+  // useEffect(() => {
+  //   if (connectStatus !== "Connected") {
+  //     // mqttSub({ topic: "thp/abc" });
+  //   }
+  //   // const intervalId = setInterval(() => {
+  //   //   console.log(currDateTime(), connectStatus);
+  //   //   mqttPub({ topic: "thp/abc", payload: currDateTime() });
+  //   //   setData({ ...dataCPO });
+  //   // }, 1000 * 10);
+
+  //   // return () => clearInterval(intervalId);
+  //   // console.log(connectStatus, payLoad);
+  // }, []);
+
+  return mills.map(({ title, tanks, topic }, i) => (
+    <Tank key={i} {...dataCPO[topic]} currTime={currDateTime()} />
+  ));
+}
