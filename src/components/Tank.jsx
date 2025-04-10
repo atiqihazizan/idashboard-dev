@@ -1,6 +1,25 @@
 import { useEffect, useState } from "react";
 import TankSvg from "./TankSvg";
 
+const formatDateTime = (dateTimeStr) => {
+  try {
+    const date = new Date(dateTimeStr);
+    if (isNaN(date.getTime())) return ""; // Return empty string if invalid date
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear().toString().slice(-2);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${day} ${month} ${year}<br/>${hours}:${minutes}`;
+  } catch (error) {
+    console.error("Date parsing error:", error);
+    return "";
+  }
+};
+
 export default function Tank({ title, tanks, tabledata, tid }) {
   const [logTime, setLogTime] = useState("");
   const [tankLevel, setLevel] = useState();
@@ -52,7 +71,7 @@ export default function Tank({ title, tanks, tabledata, tid }) {
               </span>
               <span
                 className="text-end pr-0 text-xs sm:text-sm md:text-base"
-                dangerouslySetInnerHTML={{ __html: logTime }}
+                dangerouslySetInnerHTML={{ __html: formatDateTime(logTime) }}
               />
             </div>
           </td>
@@ -109,26 +128,31 @@ export default function Tank({ title, tanks, tabledata, tid }) {
                 <table className="w-full space-y-2 md:space-y-3">
                   <tbody>
                     <tr>
-                      <td className="text-xs sm:text-sm md:text-base pb-1 md:pb-2">VOLUME</td>
-                      <td className="text-segment text-sm sm:text-lg md:text-[1.5rem] pb-1 md:pb-2">
+                      <td className="text-xs sm:text-sm md:text-base pb-1 md:pb-2 text-left">VOLUME</td>
+                      <td className="text-segment text-sm sm:text-lg md:text-[1.5rem] pb-1 md:pb-2 text-right">
                         {data?.ESTIMATE_VOLUME?.toLocaleString() || 0} LT
                       </td>
                     </tr>
                     <tr>
-                      <td className="text-xs sm:text-sm md:text-base pb-1 md:pb-2">HEIGHT</td>
-                      <td className="text-segment text-sm sm:text-lg md:text-[1.5rem] pb-1 md:pb-2">
+                      <td className="text-xs sm:text-sm md:text-base pb-1 md:pb-2 text-left">
+                        {data?.METHOD === 'D' ? 'DIPPING HEIGHT' : 'ULLAGE HEIGHT'}
+                      </td>
+                      <td className="text-segment text-sm sm:text-lg md:text-[1.5rem] pb-1 md:pb-2 text-right">
                         {data?.height || 0} MM
                       </td>
                     </tr>
                     <tr>
-                      <td className="text-xs sm:text-sm md:text-base pb-1 md:pb-2">TEMP</td>
-                      <td className="text-segment text-sm sm:text-lg md:text-[1.5rem] pb-1 md:pb-2">
+                      <td className="text-xs sm:text-sm md:text-base pb-1 md:pb-2 text-left">
+                        <span className="hidden md:inline">TEMPERATURE</span>
+                        <span className="inline md:hidden">TEMP</span>
+                      </td>
+                      <td className="text-segment text-sm sm:text-lg md:text-[1.5rem] pb-1 md:pb-2 text-right">
                         {data?.temp || 0} &#8451;
                       </td>
                     </tr>
                     <tr>
-                      <td className="text-xs sm:text-sm md:text-base">STATUS</td>
-                      <td className={`py-1 md:py-2 font-medium ${colorStatus[data?.status]}`}>
+                      <td className="text-xs sm:text-sm md:text-base text-left">STATUS</td>
+                      <td className={`py-1 md:py-2 font-medium ${colorStatus[data?.status]} text-right`}>
                         {strStatus[data?.status]}
                       </td>
                     </tr>
