@@ -111,8 +111,8 @@ function App() {
   return (
     <div className="flex flex-col">
       <div
-        className={`grid-cols-3 gap-4 p-4 grid-auto-rows-max-h-300 ${
-          getPage === "ffb" ? "grid" : "hidden"
+        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 p-4 sm:p-6 md:p-8 grid-auto-rows-max-h-300 ${
+          getPage === "ffb" ? "block" : "hidden"
         }`}
       >
         {mills.map(({ topic }, i) => (
@@ -120,8 +120,8 @@ function App() {
         ))}
       </div>
       <div
-        className={`grid-cols-3 gap-4 p-4 grid-auto-rows-max-h-300 ${
-          getPage === "bst" ? "grid" : "hidden"
+        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 p-4 sm:p-6 md:p-8 grid-auto-rows-max-h-300 ${
+          getPage === "bst" ? "block" : "hidden"
         }`}
       >
         {mills.map(({ topic }, i) => (

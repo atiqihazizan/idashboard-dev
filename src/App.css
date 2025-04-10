@@ -102,18 +102,45 @@ table td {
   padding: 0.5rem;
 }
 
+.col_bst_info table td {
+  border: 0;
+}
 .col_bst_tank {
   padding: 0;
 }
 
 .bst_info td {
   border: 0 !important;
-  font-size: 1.1rem;
+  font-size: 0.875rem;
   padding: 0;
 }
 
+@media (min-width: 640px) {
+  .bst_info td {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .bst_info td {
+    font-size: 1.1rem;
+  }
+}
+
 .bst_info td.text-segment {
-  font-size: 1.7rem !important;
+  font-size: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .bst_info td.text-segment {
+    font-size: 1.25rem !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .bst_info td.text-segment {
+    font-size: 1.5rem !important;
+  }
 }
 
 .bst_info td:first-child {
@@ -128,7 +155,7 @@ table td {
 
 .col_bst_tank {
   position: relative;
-  width: 100px;
+  width: 188px;
 }
 
 .percent_wrapper {

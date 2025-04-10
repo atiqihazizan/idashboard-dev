@@ -5,7 +5,7 @@ export default function TankSvg({ id = 0, level = 100, bstNo = 0, vol = 0 }) {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
-      width="180px"
+      width="100%"
       height="166px"
       style={{
         shapeRendering: "gometricPrecision",

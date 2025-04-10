@@ -3,34 +3,65 @@ function objectEmpty(obj) {
 }
 
 function currDateTime(mydate) {
-  const now = new Date(mydate?.replace("PM", "")?.replace("AM", ""));
-  const dateTime = now
-    .toLocaleString("ms-MY", {
-      // timeZone: "UTC",
-      hour12: false,
-      month: "short",
-      day: "2-digit",
-      year: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      // second: "2-digit",
-    })
-    .replaceAll("/", " ")
-    .replaceAll("pada", "<br/>")
-    .replaceAll(",", "<br/>");
-  return dateTime;
+  try {
+    if (!mydate) {
+      return dateTimeNow();
+    }
+
+    // Parse the specific format: "2025-04-10 12:06:15 PM"
+    const [datePart, timePart, meridiem] = mydate.trim().split(' ');
+    const [year, month, day] = datePart.split('-');
+    const [hours, minutes, seconds] = timePart.split(':');
+    
+    // Convert hours to 24-hour format if needed
+    let hour24 = parseInt(hours);
+    if (meridiem?.toUpperCase() === 'PM' && hour24 < 12) {
+      hour24 += 12;
+    } else if (meridiem?.toUpperCase() === 'AM' && hour24 === 12) {
+      hour24 = 0;
+    }
+
+    const date = new Date(
+      parseInt(year),
+      parseInt(month) - 1,
+      parseInt(day),
+      hour24,
+      parseInt(minutes),
+      parseInt(seconds)
+    );
+
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid date");
+    }
+
+    const dateTime = date
+      .toLocaleString("ms-MY", {
+        hour12: false,
+        month: "short",
+        day: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+      .replaceAll("/", " ")
+      .replaceAll("pada", "<br/>")
+      .replaceAll(",", "<br/>");
+    return dateTime;
+  } catch (error) {
+    console.warn("Date parsing error:", error, "for input:", mydate);
+    return "Invalid date";
+  }
 }
+
 function dateTimeNow() {
   const now = new Date();
   const dateTime = now.toLocaleString("ms-MY", {
-    // timeZone: "UTC",
     hour12: false,
     month: "2-digit", // "long",
     day: "2-digit",
     year: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    // second: "2-digit",
   });
   return dateTime;
 }
